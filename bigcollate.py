@@ -33,14 +33,18 @@ def bigcollate(ids_to_process, collectiondir, rewrite_existing=False, include_di
         
         pagelist = []
         
-        with ZipFile(pagepath + filename,mode='r') as zipvol:
-            zippages = zipvol.namelist()
-            zippages.sort()
-            del zippages[0]
-            for f in zippages:
-                pagecode = zipvol.read(f)
-                pagetxt = pagecode.decode('utf-8').splitlines(True)
-                pagelist.append(pagetxt)
+        try: 
+            with ZipFile(pagepath + filename,mode='r') as zipvol:
+                zippages = zipvol.namelist()
+                zippages.sort()
+                del zippages[0]
+                for f in zippages:
+                    pagecode = zipvol.read(f)
+                    pagetxt = pagecode.decode('utf-8').splitlines(True)
+                    pagelist.append(pagetxt)
+        except FileNotFoundError:
+            print("{}: {} error: file not found".format(count, HTid))
+            continue
 
         ## Here is where all the collating magic happens. Repeated page headers
         ## are removed, and used to divde the document into <div>s.
