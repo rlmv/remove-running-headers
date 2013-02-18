@@ -1,6 +1,6 @@
-My fork of Ted Underwood's remove-running-headers package (his notes below). I've refactored the main collation loop into a function, and added some kwarg hooks to suppress printing divisions to the collated file.
+My fork of Ted Underwood's remove-running-headers package (his notes below). I've refactored the main collation loop into a function, and added some kwarg hooks to suppress printing divisions to the collated file
 
-_ _ _
+***
 
 A COLLATOR that removes running headers from HathiTrust files
 by Mike Black, with occasional input from Ted Underwood
