@@ -1,6 +1,8 @@
-from . import filekeeping
+
 from glob import glob
 from zipfile import ZipFile
+
+from .filekeeping import pairtreepath
 from .collator3 import collate
 
 
@@ -14,7 +16,7 @@ def bigcollate(ids_to_process, rewrite_existing=True, include_divs=True):
         # if count < 223000:
         #     continue
         
-        path, postfix = filekeeping.pairtreepath(HTid, collectiondir)
+        path, postfix = pairtreepath(HTid, collectiondir)
         pagepath = path + postfix + "/"
         filename = postfix + ".zip"
 
