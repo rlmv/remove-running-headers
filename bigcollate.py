@@ -4,7 +4,7 @@ from zipfile import ZipFile
 from collator3 import collate
 
 
-def bigcollate(ids_to_process, rewrite_existing=False, no_divs=False):
+def bigcollate(ids_to_process, rewrite_existing=True, include_divs=True):
     count = 0
 
     for HTid in ids_to_process:
@@ -18,7 +18,7 @@ def bigcollate(ids_to_process, rewrite_existing=False, no_divs=False):
         pagepath = path + postfix + "/"
         filename = postfix + ".zip"
 
-        if not rewrite_existing:
+        if rewrite_existing:
             if len(glob(pagepath + postfix + "*.txt")) > 0 and len(glob(pagepath + postfix + "*.meta")) > 0:
                 print(str(count) + ": " + HTid + " written during previous session. Skipping.")
                 continue
@@ -43,6 +43,7 @@ def bigcollate(ids_to_process, rewrite_existing=False, no_divs=False):
         ## Here is where all the collating magic happens. Repeated page headers
         ## are removed, and used to divde the document into <div>s.
         
+        no_divs = not include_divs
         pagelist, numberofdivs, metatable, wc = collate(pagelist, no_divs=no_divs)
         
         ## Creates a metadata file from the collator's section divisions.  The metadata is output as
@@ -52,16 +53,17 @@ def bigcollate(ids_to_process, rewrite_existing=False, no_divs=False):
         ##
         ## For files without running headers, a blank set is written.
         
-        with open(pagepath + postfix + ".meta",mode='w',encoding='utf-8') as file:
-            file.write(HTid + "\t" + str(numberofdivs) + "\t" + str(wc) +"\n")
-            if metatable == list() or numberofdivs == 1:
-                file.write("0\tfulltext\t0\t" + str(len(pagelist) - 1) + "\t" + str(wc))
-            else:
-                for idx,entry in enumerate(metatable):
-                    if idx + 1 < len(metatable):
-                        file.write(str(idx) + "\t" + str(entry[0]) + "\t" + str(entry[1]) + "\t" + str(entry[2][0]) + "\t" + str(entry[2][1]) + "\n")
-                    else:
-                        file.write(str(idx) + "\t" + str(entry[0]) + "\t" + str(entry[1]) + "\t" + str(entry[2][0]) + "\t" + str(entry[2][1]))
+        if include_divs:
+            with open(pagepath + postfix + ".meta",mode='w',encoding='utf-8') as file:
+                file.write(HTid + "\t" + str(numberofdivs) + "\t" + str(wc) +"\n")
+                if metatable == list() or numberofdivs == 1:
+                    file.write("0\tfulltext\t0\t" + str(len(pagelist) - 1) + "\t" + str(wc))
+                else:
+                    for idx,entry in enumerate(metatable):
+                        if idx + 1 < len(metatable):
+                            file.write(str(idx) + "\t" + str(entry[0]) + "\t" + str(entry[1]) + "\t" + str(entry[2][0]) + "\t" + str(entry[2][1]) + "\n")
+                        else:
+                            file.write(str(idx) + "\t" + str(entry[0]) + "\t" + str(entry[1]) + "\t" + str(entry[2][0]) + "\t" + str(entry[2][1]))
                                    
         with open(pagepath + postfix + ".txt", mode='w', encoding='utf-8') as file:
             for page in pagelist:
