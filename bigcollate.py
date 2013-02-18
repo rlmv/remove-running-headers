@@ -3,7 +3,7 @@ from glob import glob
 from zipfile import ZipFile
 from collator3 import collate
 
-collectiondir = '/Volumes/obelisk/zipped/serials/'
+collectiondir = '/Volumes/ELEMENTS/non_google/'
     
 HTids_to_process = []
 with open(collectiondir + 'id',encoding='utf-8') as file:
@@ -16,8 +16,8 @@ for HTid in HTids_to_process:
     count += 1
     
     ## To skip large sections of the HTid list, uncomment and provide a count number
-    if count < 223000:
-        continue
+    # if count < 223000:
+    #     continue
     
     path, postfix = filekeeping.pairtreepath(HTid, collectiondir)
     pagepath = path + postfix + "/"
