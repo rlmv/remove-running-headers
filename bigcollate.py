@@ -1,7 +1,7 @@
-import filekeeping
+from . import filekeeping
 from glob import glob
 from zipfile import ZipFile
-from collator3 import collate
+from .collator3 import collate
 
 
 def bigcollate(ids_to_process, rewrite_existing=True, include_divs=True):
