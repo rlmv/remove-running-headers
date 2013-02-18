@@ -4,9 +4,7 @@ from zipfile import ZipFile
 from collator3 import collate
 
 
-        
-
-def bigcollate(ids_to_process):
+def bigcollate(ids_to_process, rewrite_existing=False, no_divs=False):
     count = 0
 
     for HTid in ids_to_process:
@@ -20,9 +18,10 @@ def bigcollate(ids_to_process):
         pagepath = path + postfix + "/"
         filename = postfix + ".zip"
 
-        if len(glob(pagepath + postfix + "*.txt")) > 0 and len(glob(pagepath + postfix + "*.meta")) > 0:
-            print(str(count) + ": " + HTid + " written during previous session. Skipping.")
-            continue
+        if not rewrite_existing:
+            if len(glob(pagepath + postfix + "*.txt")) > 0 and len(glob(pagepath + postfix + "*.meta")) > 0:
+                print(str(count) + ": " + HTid + " written during previous session. Skipping.")
+                continue
         
         print(str(count) +": " + HTid)
 
@@ -44,7 +43,7 @@ def bigcollate(ids_to_process):
         ## Here is where all the collating magic happens. Repeated page headers
         ## are removed, and used to divde the document into <div>s.
         
-        pagelist, numberofdivs, metatable, wc = collate(pagelist)
+        pagelist, numberofdivs, metatable, wc = collate(pagelist, no_divs=no_divs)
         
         ## Creates a metadata file from the collator's section divisions.  The metadata is output as
         ## section #, running header pair in section, section wordcount, first page of section, last page
@@ -81,4 +80,4 @@ if __name__ == "__main__":
         for line in file:
             HTids_to_process.append(line.rstrip())
 
-    bigcollate(HTids_to_process)
+    bigcollate(HTids_to_process, rewrite_existing=True, no_divs=True)

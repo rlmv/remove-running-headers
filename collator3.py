@@ -457,12 +457,14 @@ def removeheader(remove, page, num=False):
     else:
         return page
 
-def collate(pagelist):
+def collate(pagelist, no_divs=False):
     '''
     Accepts a list of pages (each of which is a list of lines) and reads through them,
     discovering headers (if present) and guessing section divisions based on pairing
     patterns.  Returns the prepared text, ready for writing to disk (or analysis by
     functions from other libraries).
+
+    rlmv: MODIFIED: hacked in no_divs to produce collated pages with no tags.
     '''
     pageheaders = []
     for page in pagelist:
@@ -609,13 +611,14 @@ def collate(pagelist):
                 page[-1] += "\n"
             else:
                 del page[-1]
-            page.append("<pb>\n")
+            if not no_divs:
+                page.append("<pb>\n")
             
             ## Recursive algorithm that will remove empty lines, page numbers, and running headers at the top of a page
             if len(page) > 1:
                 pagelist[idx] = removeheader(remove, page)
                 
-        if idx in divplace:
+        if not no_divs and idx in divplace:
             if len(divplace) > 1:
                 page.insert(0,"<div id=\"" + divplace[idx][1] + "\" code=\"" + str(divplace[idx][3]) + "\" wordcount=\"" + str(divplace[idx][2]) + "\">\n")
             else:
