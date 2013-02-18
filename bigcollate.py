@@ -20,8 +20,8 @@ def bigcollate(ids_to_process, collectiondir, rewrite_existing=False, include_di
         pagepath = path + postfix + "/"
         filename = postfix + ".zip"
 
-        if not rewrite_existing:
-            if len(glob(pagepath + postfix + "*.txt")) > 0 and len(glob(pagepath + postfix + "*.meta")) > 0:
+        if not rewrite_existing:                        ## mhhh mhhh meh. Not elegant. Fix this.
+            if len(glob(pagepath + postfix + "*.txt")) > 0: # and len(glob(pagepath + postfix + "*.meta")) > 0:
                 print(str(count) + ": " + HTid + " written during previous session. Skipping.")
                 continue
         

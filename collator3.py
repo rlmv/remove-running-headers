@@ -408,6 +408,9 @@ def removeheader(remove, page, num=False):
     recursion errors that could result with a page that is nothing
     but numbers.
     '''
+    if len(page) == 0:
+        return page
+        
     header = page[0]
     header = header.strip(' \n')
 
