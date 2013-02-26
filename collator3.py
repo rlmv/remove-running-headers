@@ -619,7 +619,10 @@ def collate(pagelist, include_divs=True):
             
             ## Recursive algorithm that will remove empty lines, page numbers, and running headers at the top of a page
             if len(page) > 1:
-                pagelist[idx] = removeheader(remove, page)
+                try:
+                    pagelist[idx] = removeheader(remove, page)
+                except RuntimeError: ## recursion depth error
+                    pagelist[idx] = pagelist[idx]
                 
         if include_divs and idx in divplace:
             if len(divplace) > 1:

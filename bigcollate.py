@@ -6,15 +6,16 @@ from .filekeeping import pairtreepath
 from .collator3 import collate
 
 
-def bigcollate(ids_to_process, collectiondir, rewrite_existing=False, include_divs=True):
-    count = 0
+def bigcollate(ids_to_process, collectiondir, rewrite_existing=False, 
+                include_divs=True, skip=0):
+    count = 0 ###<<<<<<<<
 
     for HTid in ids_to_process:
         count += 1
         
         ## To skip large sections of the HTid list, uncomment and provide a count number
-        # if count < 223000:
-        #     continue
+        if count < skip:
+            continue
         
         path, postfix = pairtreepath(HTid, collectiondir)
         pagepath = path + postfix + "/"
